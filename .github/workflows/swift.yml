@@ -1,0 +1,23 @@
+name: build
+
+on: [push, pull_request]
+
+jobs:
+  run-test:
+    runs-on: macos-11
+    strategy:
+      matrix:
+        swift-version: [5.0]
+    steps:
+      - uses: maxim-lobanov/setup-xcode@v1
+        with:
+          xcode-version: '13.0'
+      - uses: actions/checkout@v1
+      - name: Show devices
+        run: make show-devices
+      - name: Build debug
+        run: make debug-build
+      - name: Run tests
+        env:          
+          SWIFT_VERSION: ${{ matrix.swift-version }}
+        run: make test
